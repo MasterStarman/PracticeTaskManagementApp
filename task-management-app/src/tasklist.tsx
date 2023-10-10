@@ -20,6 +20,9 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onDelete, onToggle }) => {
 					task={task}
 					onDelete={onDelete}
 					onToggle={onToggle}
+					onEdit={function (id: number, updatedTask: any): void {
+						throw new Error("Function not implemented.");
+					}}
 				/>
 			))}
 		</div>

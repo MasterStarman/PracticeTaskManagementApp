@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import TaskEditForm from "./TaskEditForm";
 
 interface TaskProps {
 	//Define the structure of the 'task' prop
@@ -14,10 +15,21 @@ interface TaskProps {
 	//Define functions for handling task deletion and completion toggle
 	onDelete: (id: number) => void;
 	onToggle: (id: number) => void;
+	onEdit: (id: number, updatedTask: any) => void;
 }
 
 //Task component receives task data and event handlers as props
-const Task: React.FC<TaskProps> = ({ task, onDelete, onToggle }) => {
+const Task: React.FC<TaskProps> = ({ task, onDelete, onToggle, onEdit }) => {
+	const [isEditing, setIsEditing] = useState(false);
+
+	const handleEditClick = () => {
+		setIsEditing(true);
+	};
+
+	const handleSaveEdit = (editedTask: any) => {
+		onEdit(task.id, editedTask);
+		setIsEditing(false);
+	};
 	return (
 		<div className="task">
 			{/* Display Task Details */}
@@ -31,8 +43,17 @@ const Task: React.FC<TaskProps> = ({ task, onDelete, onToggle }) => {
 				checked={task.completed}
 				onChange={() => onToggle(task.id)}
 			/>
+			<button onClick={handleEditClick}>Edit</button>
 			{/* Button to delete the task*/}
 			<button onClick={() => onDelete(task.id)}>Delete</button>
+
+			{isEditing && (
+				<TaskEditForm
+					task={task}
+					onSave={handleSaveEdit}
+					onClose={() => setIsEditing(false)}
+				/>
+			)}
 		</div>
 	);
 };
